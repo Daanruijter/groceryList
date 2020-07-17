@@ -1,35 +1,91 @@
-.grocerystore-grid {
-    display: grid;
-    grid-template-columns: 10% auto auto 2% 2% 10%;
-    grid-template-rows: 5% 5% auto 5%;
+@media only screen and (min-width: 768px) {
 
-    padding-top: 5%;
-    height: 100vh;
-}
+    .grocerystore-grid {
+        display: grid;
+        grid-template-columns: 10% 10% 10% 10% 10% 2% 2% 10%;
+        grid-template-rows: 5% 5% auto 5%;
 
-/* .grocerystore-flexer {
-    display: flex;
-    justify-content: space-between;
-    width: 40%;
+        padding-top: 5%;
+        height: 100vh;
+    }
 
-} */
+    .grocerystore-grid input {
+        width: 80%;
+    }
 
-.grocerystore-add-item {
-    color: green;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 3;
-}
+    .grocerystore-add-item {
+        color: green;
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3;
 
-.grocerystore-product-input {
-    grid-column-start: 3;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 2;
+    }
 
-}
+    .grocerystore-product {
+        grid-column-start: 3;
+        grid-column-end: 4;
+        grid-row-start: 1;
+        grid-row-end: 2;
 
-.grocerystore-header {
-    font-weight: bold;
+
+    }
+
+    .grocerystore-product-input {
+        grid-column-start: 3;
+        grid-column-end: 4;
+        grid-row-start: 2;
+        grid-row-end: 3;
+
+    }
+
+
+    .grocerystore-amount {
+        grid-column-start: 4;
+        grid-column-end: 5;
+        grid-row-start: 1;
+        grid-row-end: 2;
+
+    }
+
+    .grocerystore-amount-input {
+        grid-column-start: 4;
+        grid-column-end: 5;
+        grid-row-start: 2;
+        grid-row-end: 3;
+
+
+    }
+
+
+    .grocerystore-extra-info {
+        grid-column-start: 5;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 2;
+
+
+    }
+
+    .grocerystore-extra-info-input {
+        grid-column-start: 5;
+        grid-column-end: 6;
+        grid-row-start: 2;
+        grid-row-end: 3;
+
+
+    }
+
+
+    .grocerystore-header {
+        font-weight: bold;
+    }
+
+    .grocerystore-delete-all {
+        color: red;
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 4;
+        grid-row-end: 5;
+    }
 }
