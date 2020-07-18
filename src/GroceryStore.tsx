@@ -1,9 +1,47 @@
 import React, { Component } from "react";
-// import Delete from "./Delete";
+// import { map } from "rxjs/operators";
+import Delete from "./Delete";
+import Check from "./Check";
+import Update from "./Update";
 import "./GroceryStore.css";
+import axios from "axios";
 
-export default class GroceryStore extends Component {
-  state = { product: "", amount: "", information: "" };
+export default class GroceryStore extends Component<Delete> {
+  constructor(props: Delete) {
+    super(props);
+  }
+  state = { product: "", amount: "", information: "", groceryData: [] };
+
+  componentDidMount() {
+    console.log("componentdidmount");
+    let url: string = "";
+
+    if (process.env.NODE_ENV === "development") {
+      url = "http://localhost:5000/groceryitems";
+    }
+    if (process.env.NODE_ENV === "production") {
+      url = "https://myitinerariestravelapp.herokuapp.com/groceryitems";
+    }
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        const groceryData = data;
+        this.setState({ groceryData: groceryData });
+        console.log(groceryData, "data fetched");
+      })
+      .catch((error) => {
+        const errorMessage: String = error.message;
+        console.log(errorMessage);
+      });
+  }
 
   catchInput = (e: any) => {
     if (
@@ -13,7 +51,41 @@ export default class GroceryStore extends Component {
     ) {
       alert("please fill in all fields!");
     } else {
-      console.log(this.state);
+      let groceryData = this.state;
+      let product = groceryData.product;
+      let amount = groceryData.amount;
+      let information = groceryData.information;
+
+      e.preventDefault();
+
+      let url: string = "";
+
+      if (process.env.NODE_ENV === "development") {
+        url = "http://localhost:5000/groceryitems";
+      }
+      if (process.env.NODE_ENV === "production") {
+        url = "https://myitinerariestravelapp.herokuapp.com/groceryitems";
+      }
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = JSON.stringify({
+        product,
+        amount,
+        information,
+      });
+
+      axios
+        .post(url, body, config)
+        .then((res) => {})
+
+        .catch((err) => {
+          console.log(err.response.data);
+        });
     }
   };
 
@@ -22,6 +94,29 @@ export default class GroceryStore extends Component {
   };
 
   render() {
+    let groceryData: any = this.state.groceryData;
+
+    let itemToDisplay = groceryData.map((item: any) => {
+      return (
+        <div className="grocerystore-positioner" key={item._id}>
+          <div className="grocerystore-product-data">{item.product}</div>
+          <div className="grocerystore-amount-data">{item.amount}</div>
+          <div className="grocerystore-information-data">
+            {item.information}
+          </div>
+          <div className="grocerystore-delete">
+            <Delete id={item._id} />
+          </div>
+          <div className="grocerystore-check">
+            <Check />
+          </div>
+          <div className="grocerystore-update">
+            <Update />
+          </div>
+        </div>
+      );
+    });
+
     return (
       <div className="grocerystore-wrapper">
         <div className="grocerystore-grid">
@@ -62,34 +157,8 @@ export default class GroceryStore extends Component {
               required
             />
           </div>
-          <div className="grocerystore-list-wrapper"></div>
+          <div className="grocerystore-positioner">{itemToDisplay}</div>
           <div className="grocerystore-delete-all">Delete all</div>
-
-          {/* <div className="grocerystore-items-container">
-            <div className="grocerystore-add-item">Add Item</div>
-            <br />
-            <div className="grocerystore-header">Item</div>
-            <div>Oranges</div>
-          </div>
-          <div className="grocerystore-delete-container">
-            <br />
-            <br />
-            <div className="grocerystore-header"></div>
-            <Delete />
-          </div>
-          <div className="grocerystore-amount-container">
-            <br />
-            <br />
-            <div className="grocerystore-header">Amount</div>
-            <div>5</div>
-          </div>
-          <div className="grocerystore-delete-container">
-            <br />
-            <br />
-            <div className="grocerystore-header"></div>
-            <Delete />
-          </div>
-          <div>Add an item</div> */}
         </div>
       </div>
     );

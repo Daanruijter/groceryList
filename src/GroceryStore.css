@@ -2,7 +2,7 @@
 
     .grocerystore-grid {
         display: grid;
-        grid-template-columns: 10% 10% 10% 10% 10% 2% 2% 10%;
+        grid-template-columns: 7% 6% 20% 20% 20% 6% 6% 8% 7%;
         grid-template-rows: 5% 5% auto 5%;
 
         padding-top: 5%;
@@ -80,6 +80,46 @@
     .grocerystore-header {
         font-weight: bold;
     }
+
+    .grocerystore-positioner {
+        display: grid;
+        grid-column-start: 1;
+        grid-column-end: 10;
+        grid-template-columns: 7% 6% 20% 20% 20% 6% 6% 8% 7%;
+    }
+
+    .grocerystore-product-data {
+        grid-column-start: 3;
+        grid-column-end: 4;
+    }
+
+    .grocerystore-amount-data {
+        grid-column-start: 4;
+        grid-column-end: 5;
+    }
+
+
+    .grocerystore-information-data {
+        grid-column-start: 5;
+        grid-column-end: 6;
+    }
+
+
+    .grocerystore-delete {
+        grid-column-start: 6;
+        grid-column-end: 7;
+    }
+
+    .grocerystore-check {
+        grid-column-start: 7;
+        grid-column-end: 8;
+    }
+
+    .grocerystore-update {
+        grid-column-start: 8;
+        grid-column-end: 9;
+    }
+
 
     .grocerystore-delete-all {
         color: red;
