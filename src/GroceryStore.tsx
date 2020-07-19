@@ -9,7 +9,13 @@ import axios from "axios";
 export default class GroceryStore extends React.Component {
   state = { product: "", amount: "", information: "", groceryData: [] };
 
+  triggerFetchData = () => {
+    console.log("triggerfetchdata");
+    this.fetchData();
+  };
+
   fetchData() {
+    console.log("fecthdata");
     let url: string = "";
 
     if (process.env.NODE_ENV === "development") {
@@ -39,18 +45,52 @@ export default class GroceryStore extends React.Component {
       });
   }
 
+  deleteAll = () => {
+    if (window.confirm("Are you sure you wish to delete all items?")) {
+      let url: string = "";
+
+      if (process.env.NODE_ENV === "development") {
+        url = "http://localhost:5000/groceryitems/deleteall";
+      }
+      if (process.env.NODE_ENV === "production") {
+        url =
+          "https://myitinerariestravelapp.herokuapp.com/groceryitems/deleteall";
+      }
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = {};
+
+      axios
+        .get(url, body)
+        .then((res) => {
+          console.log(res);
+          this.fetchData();
+        })
+
+        .catch((err) => {
+          console.log(err.response);
+        });
+    }
+  };
+
   componentDidMount() {
     console.log("componentdidmount");
     this.fetchData();
   }
 
+  catchEnterEvent = (e: any) => {
+    if (e.key === "Enter") {
+      this.catchInput(e);
+    }
+  };
+
   catchInput = (e: any) => {
-    if (
-      this.state.product === "" ||
-      this.state.amount === "" ||
-      this.state.information === ""
-    ) {
-      alert("please fill in all fields!");
+    if (this.state.product === "" || this.state.amount === "") {
+      alert("please fill in product and amount fields!");
     } else {
       let groceryData = this.state;
       let product = groceryData.product;
@@ -82,7 +122,9 @@ export default class GroceryStore extends React.Component {
 
       axios
         .post(url, body, config)
-        .then((res) => {})
+        .then((res) => {
+          this.fetchData();
+        })
 
         .catch((err) => {
           console.log(err.response.data);
@@ -106,7 +148,7 @@ export default class GroceryStore extends React.Component {
             {item.information}
           </div>
           <div className="grocerystore-delete">
-            <Delete id={item._id} delete={this.fetchData} />
+            <Delete id={item._id} triggerFetchdata={this.triggerFetchData} />
           </div>
           <div className="grocerystore-check">
             <Check />
@@ -153,13 +195,16 @@ export default class GroceryStore extends React.Component {
             <input
               name="information"
               onChange={(e: any) => this.addInput(e)}
+              onKeyDown={this.catchEnterEvent}
               type="text"
               placeholder="type extra info here"
               required
             />
           </div>
-          <div className="grocerystore-positioner">{itemToDisplay}</div>
-          <div className="grocerystore-delete-all">Delete all</div>
+          <div className="grocerystore-positioner ">{itemToDisplay}</div>
+          <div onClick={this.deleteAll} className="grocerystore-delete-all">
+            Delete all
+          </div>
         </div>
       </div>
     );
