@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 // import { map } from "rxjs/operators";
 import Delete from "./Delete";
 import Check from "./Check";
@@ -6,14 +6,10 @@ import Update from "./Update";
 import "./GroceryStore.css";
 import axios from "axios";
 
-export default class GroceryStore extends Component<Delete> {
-  constructor(props: Delete) {
-    super(props);
-  }
+export default class GroceryStore extends React.Component {
   state = { product: "", amount: "", information: "", groceryData: [] };
 
-  componentDidMount() {
-    console.log("componentdidmount");
+  fetchData() {
     let url: string = "";
 
     if (process.env.NODE_ENV === "development") {
@@ -41,6 +37,11 @@ export default class GroceryStore extends Component<Delete> {
         const errorMessage: String = error.message;
         console.log(errorMessage);
       });
+  }
+
+  componentDidMount() {
+    console.log("componentdidmount");
+    this.fetchData();
   }
 
   catchInput = (e: any) => {
@@ -105,7 +106,7 @@ export default class GroceryStore extends Component<Delete> {
             {item.information}
           </div>
           <div className="grocerystore-delete">
-            <Delete id={item._id} />
+            <Delete id={item._id} delete={this.fetchData} />
           </div>
           <div className="grocerystore-check">
             <Check />
