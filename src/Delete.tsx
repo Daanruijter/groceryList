@@ -22,12 +22,6 @@ export default class Delete extends React.Component<props> {
           "https://myitinerariestravelapp.herokuapp.com/groceryitems/deleteitem";
       }
 
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
       const body = {
         id,
       };

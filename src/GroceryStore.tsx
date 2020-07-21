@@ -56,11 +56,6 @@ export default class GroceryStore extends React.Component {
         url =
           "https://myitinerariestravelapp.herokuapp.com/groceryitems/deleteall";
       }
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
 
       const body = {};
 
@@ -127,7 +122,7 @@ export default class GroceryStore extends React.Component {
         })
 
         .catch((err) => {
-          console.log(err.response.data);
+          console.log(err.response);
         });
     }
   };
@@ -151,7 +146,7 @@ export default class GroceryStore extends React.Component {
             <Delete id={item._id} triggerFetchdata={this.triggerFetchData} />
           </div>
           <div className="grocerystore-check">
-            <Check />
+            <Check id={item._id} />
           </div>
           <div className="grocerystore-update">
             <Update />
