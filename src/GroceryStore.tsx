@@ -9,6 +9,11 @@ import axios from "axios";
 export default class GroceryStore extends React.Component {
   state = { product: "", amount: "", information: "", groceryData: [] };
 
+  componentDidMount() {
+    console.log("componentdidmount");
+    this.fetchData();
+  }
+
   triggerFetchData = () => {
     console.log("triggerfetchdata");
     this.fetchData();
@@ -71,11 +76,6 @@ export default class GroceryStore extends React.Component {
         });
     }
   };
-
-  componentDidMount() {
-    console.log("componentdidmount");
-    this.fetchData();
-  }
 
   catchEnterEvent = (e: any) => {
     if (e.key === "Enter") {

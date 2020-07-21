@@ -70,7 +70,7 @@ export default class Check extends React.Component<props> {
       })
       .then((data) => {
         const ids = data;
-        console.log(ids[0].checkIdArray, "data fetched from check");
+        console.log(ids, "data fetched from check");
         this.setState({ checkIdArray: ids[0].checkIdArray });
       })
       .catch((error) => {
@@ -81,44 +81,44 @@ export default class Check extends React.Component<props> {
 
   sendCheckId = () => {
     let id = this.props.id;
-    let checkIdArray;
-    if (checkIdArray !== "") {
-      checkIdArray = this.state.checkIdArray;
+    // let checkIdArray;
+    // if (checkIdArray === "" || checkIdArray === "") {
+    // let checkIdArray = this.state.checkIdArray;
 
-      this.fetchCheckIdArray();
-      if (checkIdArray.includes(id)) {
-        console.log("includes id");
-        // this.removeId();
-      } else {
-        let url: string = "";
+    this.fetchCheckIdArray();
+    // if (checkIdArray.includes(id)) {
+    console.log("includes id");
+    // this.removeId();
+    // } else {
+    let url: string = "";
 
-        if (process.env.NODE_ENV === "development") {
-          url = "http://localhost:5000/groceryitems/getidforcheck";
-        }
-        if (process.env.NODE_ENV === "production") {
-          url =
-            "https://myitinerariestravelapp.herokuapp.com/groceryitems/getidforcheck";
-        }
-        let headers = {};
-        const body = {
-          id,
-        };
-
-        axios
-          .post(url, body, {
-            headers,
-          })
-          .then((res) => {
-            console.log(res.data);
-          })
-
-          .catch((err) => {
-            console.log(err.response);
-          });
-
-        console.log("excludes id");
-      }
+    if (process.env.NODE_ENV === "development") {
+      url = "http://localhost:5000/groceryitems/getidforcheck";
     }
+    if (process.env.NODE_ENV === "production") {
+      url =
+        "https://myitinerariestravelapp.herokuapp.com/groceryitems/getidforcheck";
+    }
+    let headers = {};
+    const body = {
+      id,
+    };
+
+    axios
+      .post(url, body, {
+        headers,
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+
+      .catch((err) => {
+        console.log(err.response);
+      });
+
+    console.log("excludes id");
+    // }
+    // }
   };
   render() {
     return <div onClick={this.sendCheckId}>V</div>;
