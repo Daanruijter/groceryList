@@ -87,6 +87,7 @@
         grid-column-start: 1;
         grid-column-end: 10;
         grid-template-columns: 6% 10% 10% 10% 7% 6% 6% 8% 37%;
+        grid-template-rows: 1fr 1fr
     }
 
     .grocerystore-line-height {
@@ -98,31 +99,63 @@
         grid-column-end: 3;
     }
 
+    .grocerystore-product-update {
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3;
+    }
+
     .grocerystore-amount-data {
         grid-column-start: 3;
         grid-column-end: 4;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+
+    .grocerystore-amount-update {
+        grid-column-start: 3;
+        grid-column-end: 4;
+        grid-row-start: 2;
+        grid-row-end: 3;
     }
 
 
     .grocerystore-information-data {
         grid-column-start: 4;
         grid-column-end: 5;
+        grid-row-start: 1;
+        grid-row-end: 2;
     }
+
+    .grocerystore-information-update {
+        grid-column-start: 4;
+        grid-column-end: 5;
+        grid-row-start: 2;
+        grid-row-end: 3;
+    }
+
 
 
     .grocerystore-delete {
         grid-column-start: 6;
         grid-column-end: 7;
+        grid-row-start: 1;
+        grid-row-end: 2;
     }
 
     .grocerystore-check {
         grid-column-start: 7;
         grid-column-end: 8;
+        grid-row-start: 1;
+        grid-row-end: 2;
     }
 
     .grocerystore-update {
         grid-column-start: 8;
         grid-column-end: 9;
+        grid-row-start: 1;
+        grid-row-end: 2;
     }
 
 

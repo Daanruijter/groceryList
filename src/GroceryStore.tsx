@@ -6,13 +6,47 @@ import Update from "./Update";
 import "./GroceryStore.css";
 import axios from "axios";
 
-export default class GroceryStore extends React.Component {
-  state = { product: "", amount: "", information: "", groceryData: [] };
+interface props {
+  inputProductRef?: HTMLInputElement;
+}
+
+export default class GroceryStore extends React.Component<props> {
+  private inputProductRef: React.RefObject<HTMLInputElement>;
+  constructor(props: any) {
+    super(props);
+    this.inputProductRef = React.createRef();
+  }
+
+  state = {
+    product: "",
+    amount: "",
+    information: "",
+    groceryData: [],
+    updateOpen: false,
+    updateId: "",
+  };
+
+  updateItem = (itemId: any) => {
+    console.log(itemId);
+    console.log("exectuedddd");
+    this.setState({
+      updateOpen: !this.state.updateOpen,
+      updateId: itemId,
+    });
+  };
 
   componentDidMount() {
     console.log("componentdidmount");
     this.fetchData();
   }
+
+  clearState = () => {
+    this.setState({
+      product: "",
+      amount: "",
+      information: "",
+    });
+  };
 
   triggerFetchData = () => {
     console.log("triggerfetchdata");
@@ -80,6 +114,9 @@ export default class GroceryStore extends React.Component {
   catchEnterEvent = (e: any) => {
     if (e.key === "Enter") {
       this.catchInput(e);
+      if (null !== this.inputProductRef.current) {
+        this.inputProductRef.current.focus();
+      }
     }
   };
 
@@ -119,16 +156,22 @@ export default class GroceryStore extends React.Component {
         .post(url, body, config)
         .then((res) => {
           this.fetchData();
+          this.clearState();
         })
 
         .catch((err) => {
           console.log(err.response);
         });
     }
+    if (null !== this.inputProductRef.current) {
+      this.inputProductRef.current.focus();
+    }
   };
 
   addInput = (e: any) => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   };
 
   render() {
@@ -137,11 +180,26 @@ export default class GroceryStore extends React.Component {
     let itemToDisplay = groceryData.map((item: any) => {
       return (
         <div className="grocerystore-positioner" key={item._id}>
-          <div className="grocerystore-product-data">{item.product}</div>
+          <div className="grocerystore-product-data">{item.product}</div>{" "}
+          {item._id === this.state.updateId ? (
+            <div className="grocerystore-product-update">
+              <input></input>
+            </div>
+          ) : null}
           <div className="grocerystore-amount-data">{item.amount}</div>
+          {item._id === this.state.updateId ? (
+            <div className="grocerystore-amount-update">
+              <input></input>
+            </div>
+          ) : null}
           <div className="grocerystore-information-data">
             {item.information}
-          </div>
+          </div>{" "}
+          {item._id === this.state.updateId ? (
+            <div className="grocerystore-information-update">
+              <input></input>
+            </div>
+          ) : null}
           <div className="grocerystore-delete">
             <Delete id={item._id} triggerFetchdata={this.triggerFetchData} />
           </div>
@@ -149,7 +207,7 @@ export default class GroceryStore extends React.Component {
             <Check id={item._id} />
           </div>
           <div className="grocerystore-update">
-            <Update />
+            <Update updateItem={this.updateItem} id={item._id} />
           </div>
         </div>
       );
@@ -171,6 +229,8 @@ export default class GroceryStore extends React.Component {
               type="text"
               placeholder="type the product here"
               required
+              value={this.state.product}
+              ref={this.inputProductRef}
             />
           </div>
           <div className="grocerystore-amount  grocerystore-header">Amount</div>
@@ -181,6 +241,7 @@ export default class GroceryStore extends React.Component {
               type="text"
               placeholder="type the amount here"
               required
+              value={this.state.amount}
             />
           </div>
           <div className="grocerystore-extra-info  grocerystore-header">
@@ -194,6 +255,7 @@ export default class GroceryStore extends React.Component {
               type="text"
               placeholder="type extra info here"
               required
+              value={this.state.information}
             />
           </div>
           <div className="grocerystore-positioner ">{itemToDisplay}</div>

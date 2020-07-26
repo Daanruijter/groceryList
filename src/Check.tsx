@@ -13,7 +13,23 @@ export default class Check extends React.Component<props> {
     this.fetchCheckIdArray();
   }
 
-  removeId = () => {
+  changeCheckItemColor = () => {
+    let currentId = this.props.id;
+    let idArray = this.state.checkIdArray;
+
+    if (idArray.includes(currentId)) {
+      this.removeCheckId();
+      console.log("zit erin");
+    } else {
+      this.addCheckId();
+      console.log("zit er niet in");
+      console.log(currentId);
+      console.log(idArray);
+    }
+  };
+
+  //remove an ID if it already exists in the array and the user hits the check button
+  removeCheckId = () => {
     console.log("deleteid");
 
     let url: string = "";
@@ -42,12 +58,14 @@ export default class Check extends React.Component<props> {
       .post(url, body, config)
       .then((res: any) => {
         console.log(res);
+        this.fetchCheckIdArray();
       })
       .catch((err: any) => {
         console.log(err.response.data);
       });
   };
 
+  //fetch the array of checked grocery item ids
   fetchCheckIdArray() {
     let url: string = "";
 
@@ -79,25 +97,26 @@ export default class Check extends React.Component<props> {
       });
   }
 
-  sendCheckId = () => {
+  //when a user checks a grocery item and if it's ID is not in the array, add the ID
+  addCheckId = () => {
     let id = this.props.id;
-    // let checkIdArray;
+    let checkIdArray = this.state.checkIdArray;
     // if (checkIdArray === "" || checkIdArray === "") {
     // let checkIdArray = this.state.checkIdArray;
 
-    this.fetchCheckIdArray();
-    // if (checkIdArray.includes(id)) {
-    console.log("includes id");
+    if (checkIdArray.includes(id)) {
+      console.log("includes id");
+    }
     // this.removeId();
     // } else {
     let url: string = "";
 
     if (process.env.NODE_ENV === "development") {
-      url = "http://localhost:5000/groceryitems/getidforcheck";
+      url = "http://localhost:5000/groceryitems/pushidforcheck";
     }
     if (process.env.NODE_ENV === "production") {
       url =
-        "https://myitinerariestravelapp.herokuapp.com/groceryitems/getidforcheck";
+        "https://myitinerariestravelapp.herokuapp.com/groceryitems/pushidforcheck";
     }
     let headers = {};
     const body = {
@@ -110,6 +129,7 @@ export default class Check extends React.Component<props> {
       })
       .then((res) => {
         console.log(res.data);
+        this.fetchCheckIdArray();
       })
 
       .catch((err) => {
@@ -121,6 +141,16 @@ export default class Check extends React.Component<props> {
     // }
   };
   render() {
-    return <div onClick={this.sendCheckId}>V</div>;
+    let currentId = this.props.id;
+    let idArray = this.state.checkIdArray;
+    return (
+      <div onClick={this.changeCheckItemColor}>
+        {idArray.includes(currentId) ? (
+          <div className="check-green">V</div>
+        ) : (
+          <div className="check-red">V</div>
+        )}
+      </div>
+    );
   }
 }
