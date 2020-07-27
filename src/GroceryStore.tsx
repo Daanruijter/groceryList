@@ -181,25 +181,31 @@ export default class GroceryStore extends React.Component<props> {
       return (
         <div className="grocerystore-positioner" key={item._id}>
           <div className="grocerystore-product-data">{item.product}</div>{" "}
+          {/* {this.state.updateOpen ? ( */}
           {item._id === this.state.updateId ? (
             <div className="grocerystore-product-update">
               <input></input>
             </div>
-          ) : null}
+          ) : // ) : null
+          null}
           <div className="grocerystore-amount-data">{item.amount}</div>
+          {/* {this.state.updateOpen ? ( */}
           {item._id === this.state.updateId ? (
             <div className="grocerystore-amount-update">
               <input></input>
             </div>
-          ) : null}
+          ) : // ) : null
+          null}
           <div className="grocerystore-information-data">
             {item.information}
           </div>{" "}
+          {/* {this.state.updateOpen ? ( */}
           {item._id === this.state.updateId ? (
             <div className="grocerystore-information-update">
               <input></input>
             </div>
-          ) : null}
+          ) : // ) : null
+          null}
           <div className="grocerystore-delete">
             <Delete id={item._id} triggerFetchdata={this.triggerFetchData} />
           </div>
