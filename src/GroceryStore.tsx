@@ -24,15 +24,106 @@ export default class GroceryStore extends React.Component<props> {
     groceryData: [],
     updateOpen: false,
     updateId: "",
+    updateArray: Array<{ id: string; path: string }>(),
   };
 
+  getUpdateComponentIdArray(itemId: any) {
+    let url: string = "";
+    let id = itemId;
+    if (process.env.NODE_ENV === "development") {
+      url = "http://localhost:5000/groceryitems/getupdatearray";
+    }
+    if (process.env.NODE_ENV === "production") {
+      url =
+        "https://myitinerariestravelapp.herokuapp.com/groceryitems/getupdatearray";
+    }
+
+    const body = {};
+
+    axios
+      .get(url, body)
+      .then((res) => {
+        let result = res;
+        this.setState({ updateArray: result.data[0].updateIdsArray });
+      })
+
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }
+  sendUpdateComponentId(itemId: any) {
+    let id = itemId;
+    let url: string = "";
+
+    if (process.env.NODE_ENV === "development") {
+      url = "http://localhost:5000/groceryitems/sendupdateid";
+    }
+    if (process.env.NODE_ENV === "production") {
+      url =
+        "https://myitinerariestravelapp.herokuapp.com/groceryitems/sendupdateid";
+    }
+
+    //send id of update component to array in Mongo//
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const body = JSON.stringify({
+      id,
+    });
+
+    console.log(url);
+
+    axios
+      .post(url, body, config)
+      .then((res) => {})
+
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }
+
   updateItem = (itemId: any) => {
-    console.log(itemId);
-    console.log("exectuedddd");
+    let id = itemId;
+
+    this.getUpdateComponentIdArray(id);
+
+    if (this.state.updateArray.length === 0) {
+      setTimeout(() => {
+        if (this.state.updateArray.includes(id)) {
+          this.sendUpdateComponentId(id);
+          console.log("erin en verwijder de id");
+        } else {
+          console.log("eruit en stop de id erin");
+        }
+      }, 800);
+    } else {
+      console.log(this.state.updateArray);
+      if (this.state.updateArray.includes(id)) {
+        this.sendUpdateComponentId(id);
+        console.log("erin en verwijder de id");
+      } else {
+        console.log("eruit en stop de id erin");
+      }
+    }
+
+    // console.log(itemId);
+    // console.log("exectuedddd");
+    // let updateArrayPushContent = [];
+    // updateArrayPushContent.push(itemId);
+
+    // localStorage.setItem("test", `${updateArrayPushContent}`);
+
+    // console.log(updateArrayPushContent);
+    // if (this.state.updateId === itemId) {
     this.setState({
       updateOpen: !this.state.updateOpen,
       updateId: itemId,
+      // updateArray: updateArrayPushContent,
     });
+    // }
   };
 
   componentDidMount() {

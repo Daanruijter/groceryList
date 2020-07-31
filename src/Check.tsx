@@ -19,19 +19,13 @@ export default class Check extends React.Component<props> {
 
     if (idArray.includes(currentId)) {
       this.removeCheckId();
-      console.log("zit erin");
     } else {
       this.addCheckId();
-      console.log("zit er niet in");
-      console.log(currentId);
-      console.log(idArray);
     }
   };
 
   //remove an ID if it already exists in the array and the user hits the check button
   removeCheckId = () => {
-    console.log("deleteid");
-
     let url: string = "";
 
     if (process.env.NODE_ENV === "development") {
@@ -57,7 +51,6 @@ export default class Check extends React.Component<props> {
     axios
       .post(url, body, config)
       .then((res: any) => {
-        console.log(res);
         this.fetchCheckIdArray();
       })
       .catch((err: any) => {
@@ -88,7 +81,7 @@ export default class Check extends React.Component<props> {
       })
       .then((data) => {
         const ids = data;
-        console.log(ids, "data fetched from check");
+
         this.setState({ checkIdArray: ids[0].checkIdArray });
       })
       .catch((error) => {
@@ -101,14 +94,11 @@ export default class Check extends React.Component<props> {
   addCheckId = () => {
     let id = this.props.id;
     let checkIdArray = this.state.checkIdArray;
-    // if (checkIdArray === "" || checkIdArray === "") {
-    // let checkIdArray = this.state.checkIdArray;
 
     if (checkIdArray.includes(id)) {
       console.log("includes id");
     }
-    // this.removeId();
-    // } else {
+
     let url: string = "";
 
     if (process.env.NODE_ENV === "development") {
@@ -136,7 +126,6 @@ export default class Check extends React.Component<props> {
         console.log(err.response);
       });
 
-    console.log("excludes id");
     // }
     // }
   };
