@@ -11,15 +11,15 @@ export default class Update extends React.Component<props> {
     updateOpen: false,
   };
 
-  sendIdOrNot = () => {
-    let id = this.props.id;
-    if (this.state.updateOpen) {
-      this.props.updateItem(id);
-    }
-    if (!this.state.updateOpen) {
-      this.props.updateItem("sdsd");
-    }
-  };
+  // sendIdOrNot = () => {
+  //   let id = this.props.id;
+  //   if (this.state.updateOpen) {
+  //     this.props.updateItem(id);
+  //   }
+  //   if (!this.state.updateOpen) {
+  //     this.props.updateItem("sdsd");
+  //   }
+  // };
 
   // callUpdate = () => {
   //   this.setState({ updateOpen: !this.state.updateOpen }, () => {
@@ -29,9 +29,9 @@ export default class Update extends React.Component<props> {
 
   callUpdate = () => {
     let id = this.props.id;
-    this.setState({ updateOpen: !this.state.updateOpen }, () => {
-      this.props.updateItem(id);
-    });
+    // this.setState({ updateOpen: !this.state.updateOpen }, () => {
+    this.props.updateItem(id);
+    // });
   };
 
   render() {

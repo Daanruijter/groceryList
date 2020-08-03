@@ -27,9 +27,67 @@ export default class GroceryStore extends React.Component<props> {
     updateArray: Array<{ id: string; path: string }>(),
   };
 
-  getUpdateComponentIdArray(itemId: any) {
+  //clear updatearray when the grocerycomponent mounts
+  componentDidMount() {
+    console.log("componentdidmount");
+    let url: string = "";
+
+    if (process.env.NODE_ENV === "development") {
+      url = "http://localhost:5000/groceryitems/deleteallidsfromupdateidarray";
+    }
+    if (process.env.NODE_ENV === "production") {
+      url =
+        "https://myitinerariestravelapp.herokuapp.com/groceryitems/deleteallidsfromupdateidarray";
+    }
+
+    const body = {};
+
+    axios
+      .post(url, body)
+      .then((result) => {})
+
+      .catch((err) => {
+        console.log(err.response);
+      });
+
+    this.fetchData();
+  }
+
+  //removes the Update Component Id out of the MongoDB Component Id Array if it's already in it
+  removeUpdateComponentIdFromArray(itemId: any) {
     let url: string = "";
     let id = itemId;
+    if (process.env.NODE_ENV === "development") {
+      url = "http://localhost:5000/groceryitems/deleteidfromupdateidarray";
+    }
+    if (process.env.NODE_ENV === "production") {
+      url =
+        "https://myitinerariestravelapp.herokuapp.com/groceryitems/deleteidfromupdateidarray";
+    }
+
+    const body = {
+      id,
+    };
+
+    axios
+      .post(url, body)
+      .then((result) => {
+        console.log(result, "resultttttttt");
+
+        this.fetchData();
+        // this.setState({ updateArray: result.data[0].updateIdsArray });
+      })
+
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }
+
+  //fetches the Update Component Id Array out of MongoDB
+  getUpdateComponentIdArray(itemId: any, cback: any) {
+    let url: string = "";
+    let id = itemId;
+
     if (process.env.NODE_ENV === "development") {
       url = "http://localhost:5000/groceryitems/getupdatearray";
     }
@@ -44,13 +102,26 @@ export default class GroceryStore extends React.Component<props> {
       .get(url, body)
       .then((res) => {
         let result = res;
-        this.setState({ updateArray: result.data[0].updateIdsArray });
+        this.setState(
+          { updateArray: result.data[0].updateIdsArray },
+          () => {
+            console.log("callback in setState");
+
+            cback();
+            console.log(this.state.updateArray);
+          }
+
+          // }
+          // );
+        );
       })
 
       .catch((err) => {
         console.log(err.response);
       });
   }
+
+  //sends the Id of the clicked Update Component update button to MongoDB
   sendUpdateComponentId(itemId: any) {
     let id = itemId;
     let url: string = "";
@@ -78,36 +149,74 @@ export default class GroceryStore extends React.Component<props> {
 
     axios
       .post(url, body, config)
-      .then((res) => {})
+      .then((result) => {
+        this.setState({ updateArray: result.data[0].updateIdsArray });
+      })
 
       .catch((err) => {
         console.log(err.response);
       });
   }
 
+  //Updates the item through the update button where the user clicks on
   updateItem = (itemId: any) => {
     let id = itemId;
-
-    this.getUpdateComponentIdArray(id);
-
-    if (this.state.updateArray.length === 0) {
-      setTimeout(() => {
-        if (this.state.updateArray.includes(id)) {
-          this.sendUpdateComponentId(id);
-          console.log("erin en verwijder de id");
-        } else {
-          console.log("eruit en stop de id erin");
-        }
-      }, 800);
-    } else {
+    this.getUpdateComponentIdArray(id, () => {
+      console.log(this.state.updateArray.includes(id), "includes or excludes");
       console.log(this.state.updateArray);
+
       if (this.state.updateArray.includes(id)) {
-        this.sendUpdateComponentId(id);
-        console.log("erin en verwijder de id");
-      } else {
-        console.log("eruit en stop de id erin");
+        console.log("includes id, so remove it");
+        this.removeUpdateComponentIdFromArray(id);
       }
-    }
+      if (!this.state.updateArray.includes(id)) {
+        this.sendUpdateComponentId(id);
+        console.log("excludes id, so add it");
+      }
+    });
+
+    //     console.log("ajax"););
+
+    // () => {
+    //   console.log(this.state.updateArray);
+    //   if (this.state.updateArray.includes(id)) {
+    //     console.log("includes id");
+    //     this.removeUpdateComponentIdFromArray(id);
+    //   }
+    //   if (!this.state.updateArray.includes(id)) {
+    //     this.sendUpdateComponentId(id);
+    //   }
+    // }
+
+    // this.setState({
+    //   updateOpen: !this.state.updateOpen,
+    //   updateId: itemId,
+    //   // updateArray: updateArrayPushContent,
+    // });
+    // this.getUpdateComponentIdArray(id);
+
+    // if (this.state.updateArray.length === 0) {
+    //   setTimeout(() => {
+    //     if (this.state.updateArray.includes(id)) {
+    //       this.removeUpdateComponentIdFromArray(id);
+
+    //       console.log("erin en verwijder de id");
+    //     } else {
+    //       this.sendUpdateComponentId(id);
+
+    //       console.log("eruit en stop de id erin");
+    //     }
+    //   }, 800);
+
+    // if (this.state.updateArray.includes(id)) {
+    //   this.removeUpdateComponentIdFromArray(id);
+    //   this.getUpdateComponentIdArray(id);
+    //   console.log("erin en verwijder de id");
+    // } else {
+    //   this.sendUpdateComponentId(id);
+
+    //   console.log("eruit en stop de id erin");
+    // }
 
     // console.log(itemId);
     // console.log("exectuedddd");
@@ -118,18 +227,9 @@ export default class GroceryStore extends React.Component<props> {
 
     // console.log(updateArrayPushContent);
     // if (this.state.updateId === itemId) {
-    this.setState({
-      updateOpen: !this.state.updateOpen,
-      updateId: itemId,
-      // updateArray: updateArrayPushContent,
-    });
+
     // }
   };
-
-  componentDidMount() {
-    console.log("componentdidmount");
-    this.fetchData();
-  }
 
   clearState = () => {
     this.setState({
@@ -167,7 +267,7 @@ export default class GroceryStore extends React.Component<props> {
       .then((data) => {
         const groceryData = data;
         this.setState({ groceryData: groceryData });
-        console.log(groceryData, "data fetched");
+        // console.log(groceryData, "data fetched");
       })
       .catch((error) => {
         const errorMessage: String = error.message;
