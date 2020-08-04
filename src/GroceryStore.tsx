@@ -22,6 +22,10 @@ export default class GroceryStore extends React.Component<props> {
     amount: "",
     information: "",
     groceryData: [],
+    productUpdated: "",
+    amountUpdated: "",
+    informationUpdated: "",
+    groceryDataUpdated: [],
     updateOpen: false,
     updateId: "",
     updateArray: Array<{ id: string; path: string }>(),
@@ -72,10 +76,36 @@ export default class GroceryStore extends React.Component<props> {
     axios
       .post(url, body)
       .then((result) => {
-        console.log(result, "resultttttttt");
-
+        this.getUpdateComponendIdArrayOnly(id);
         this.fetchData();
-        // this.setState({ updateArray: result.data[0].updateIdsArray });
+      })
+
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }
+
+  //set state with current/updated id array after a removing of sending an id
+  getUpdateComponendIdArrayOnly(itemId: any) {
+    let url: string = "";
+    let id = itemId;
+
+    if (process.env.NODE_ENV === "development") {
+      url = "http://localhost:5000/groceryitems/getupdatearray2";
+    }
+    if (process.env.NODE_ENV === "production") {
+      url =
+        "https://myitinerariestravelapp.herokuapp.com/groceryitems/getupdatearray2";
+    }
+
+    const body = {};
+
+    axios
+      .get(url, body)
+      .then((res) => {
+        let result = res;
+
+        this.setState({ updateArray: result.data[0].updateIdsArray }, () => {});
       })
 
       .catch((err) => {
@@ -105,10 +135,7 @@ export default class GroceryStore extends React.Component<props> {
         this.setState(
           { updateArray: result.data[0].updateIdsArray },
           () => {
-            console.log("callback in setState");
-
             cback();
-            console.log(this.state.updateArray);
           }
 
           // }
@@ -145,12 +172,10 @@ export default class GroceryStore extends React.Component<props> {
       id,
     });
 
-    console.log(url);
-
     axios
       .post(url, body, config)
       .then((result) => {
-        this.setState({ updateArray: result.data[0].updateIdsArray });
+        this.getUpdateComponendIdArrayOnly(id);
       })
 
       .catch((err) => {
@@ -159,76 +184,21 @@ export default class GroceryStore extends React.Component<props> {
   }
 
   //Updates the item through the update button where the user clicks on
-  updateItem = (itemId: any) => {
+  updateItem = (itemId: any, e: any) => {
     let id = itemId;
-    this.getUpdateComponentIdArray(id, () => {
-      console.log(this.state.updateArray.includes(id), "includes or excludes");
-      console.log(this.state.updateArray);
+    this.setState({ updateId: id });
 
+    this.getUpdateComponentIdArray(id, () => {
       if (this.state.updateArray.includes(id)) {
         console.log("includes id, so remove it");
         this.removeUpdateComponentIdFromArray(id);
+        this.catchUpdatedInput(e);
       }
       if (!this.state.updateArray.includes(id)) {
         this.sendUpdateComponentId(id);
         console.log("excludes id, so add it");
       }
     });
-
-    //     console.log("ajax"););
-
-    // () => {
-    //   console.log(this.state.updateArray);
-    //   if (this.state.updateArray.includes(id)) {
-    //     console.log("includes id");
-    //     this.removeUpdateComponentIdFromArray(id);
-    //   }
-    //   if (!this.state.updateArray.includes(id)) {
-    //     this.sendUpdateComponentId(id);
-    //   }
-    // }
-
-    // this.setState({
-    //   updateOpen: !this.state.updateOpen,
-    //   updateId: itemId,
-    //   // updateArray: updateArrayPushContent,
-    // });
-    // this.getUpdateComponentIdArray(id);
-
-    // if (this.state.updateArray.length === 0) {
-    //   setTimeout(() => {
-    //     if (this.state.updateArray.includes(id)) {
-    //       this.removeUpdateComponentIdFromArray(id);
-
-    //       console.log("erin en verwijder de id");
-    //     } else {
-    //       this.sendUpdateComponentId(id);
-
-    //       console.log("eruit en stop de id erin");
-    //     }
-    //   }, 800);
-
-    // if (this.state.updateArray.includes(id)) {
-    //   this.removeUpdateComponentIdFromArray(id);
-    //   this.getUpdateComponentIdArray(id);
-    //   console.log("erin en verwijder de id");
-    // } else {
-    //   this.sendUpdateComponentId(id);
-
-    //   console.log("eruit en stop de id erin");
-    // }
-
-    // console.log(itemId);
-    // console.log("exectuedddd");
-    // let updateArrayPushContent = [];
-    // updateArrayPushContent.push(itemId);
-
-    // localStorage.setItem("test", `${updateArrayPushContent}`);
-
-    // console.log(updateArrayPushContent);
-    // if (this.state.updateId === itemId) {
-
-    // }
   };
 
   clearState = () => {
@@ -239,13 +209,19 @@ export default class GroceryStore extends React.Component<props> {
     });
   };
 
+  clearStateUpdated = () => {
+    this.setState({
+      productUpdated: "",
+      amountUpdated: "",
+      informationUpdated: "",
+    });
+  };
+
   triggerFetchData = () => {
-    console.log("triggerfetchdata");
     this.fetchData();
   };
 
   fetchData() {
-    console.log("fecthdata");
     let url: string = "";
 
     if (process.env.NODE_ENV === "development") {
@@ -267,7 +243,6 @@ export default class GroceryStore extends React.Component<props> {
       .then((data) => {
         const groceryData = data;
         this.setState({ groceryData: groceryData });
-        // console.log(groceryData, "data fetched");
       })
       .catch((error) => {
         const errorMessage: String = error.message;
@@ -292,7 +267,6 @@ export default class GroceryStore extends React.Component<props> {
       axios
         .get(url, body)
         .then((res) => {
-          console.log(res);
           this.fetchData();
         })
 
@@ -359,7 +333,63 @@ export default class GroceryStore extends React.Component<props> {
     }
   };
 
+  catchUpdatedInput = (e: any) => {
+    if (this.state.productUpdated === "" || this.state.amountUpdated === "") {
+      alert("please fill in product and amount fields!");
+    } else {
+      let id = this.state.updateId;
+      let groceryData = this.state;
+      let productUpdated = groceryData.productUpdated;
+      let amountUpdated = groceryData.amountUpdated;
+      let informationUpdated = groceryData.informationUpdated;
+      e.preventDefault();
+
+      let url: string = "";
+
+      if (process.env.NODE_ENV === "development") {
+        url = "http://localhost:5000/groceryitems/groceryitemsupdated";
+      }
+      if (process.env.NODE_ENV === "production") {
+        url =
+          "https://myitinerariestravelapp.herokuapp.com/groceryitems/groceryitemsupdated";
+      }
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = JSON.stringify({
+        id,
+        productUpdated,
+        amountUpdated,
+        informationUpdated,
+      });
+
+      axios
+        .post(url, body, config)
+        .then((res) => {
+          this.fetchData();
+          this.clearStateUpdated();
+        })
+
+        .catch((err) => {
+          console.log(err.response);
+        });
+    }
+    if (null !== this.inputProductRef.current) {
+      this.inputProductRef.current.focus();
+    }
+  };
+
   addInput = (e: any) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  addUpdatedInput = (e: any) => {
     this.setState({
       [e.target.name]: e.target.value,
     });
@@ -372,31 +402,47 @@ export default class GroceryStore extends React.Component<props> {
       return (
         <div className="grocerystore-positioner" key={item._id}>
           <div className="grocerystore-product-data">{item.product}</div>{" "}
-          {/* {this.state.updateOpen ? ( */}
-          {item._id === this.state.updateId ? (
+          {this.state.updateArray.includes(item._id) ? (
             <div className="grocerystore-product-update">
-              <input></input>
+              <input
+                name="productUpdated"
+                onChange={(e: any) => this.addUpdatedInput(e)}
+                type="text"
+                placeholder="type the product here"
+                required
+                value={this.state.productUpdated}
+                ref={this.inputProductRef}
+              ></input>
             </div>
-          ) : // ) : null
-          null}
+          ) : null}
           <div className="grocerystore-amount-data">{item.amount}</div>
-          {/* {this.state.updateOpen ? ( */}
-          {item._id === this.state.updateId ? (
+          {this.state.updateArray.includes(item._id) ? (
             <div className="grocerystore-amount-update">
-              <input></input>
+              <input
+                name="amountUpdated"
+                onChange={(e: any) => this.addUpdatedInput(e)}
+                type="text"
+                placeholder="type the amount here"
+                required
+                value={this.state.amountUpdated}
+              ></input>
             </div>
-          ) : // ) : null
-          null}
+          ) : null}
           <div className="grocerystore-information-data">
             {item.information}
           </div>{" "}
-          {/* {this.state.updateOpen ? ( */}
-          {item._id === this.state.updateId ? (
+          {this.state.updateArray.includes(item._id) ? (
             <div className="grocerystore-information-update">
-              <input></input>
+              <input
+                name="informationUpdated"
+                onChange={(e: any) => this.addUpdatedInput(e)}
+                type="text"
+                placeholder="type the amount here"
+                required
+                value={this.state.informationUpdated}
+              ></input>
             </div>
-          ) : // ) : null
-          null}
+          ) : null}
           <div className="grocerystore-delete">
             <Delete id={item._id} triggerFetchdata={this.triggerFetchData} />
           </div>

@@ -2,7 +2,7 @@ import React from "react";
 import "./Update.css";
 
 interface props {
-  updateItem: (itemId: any) => void;
+  updateItem: (itemId: any, e: any) => void;
   id: String;
 }
 
@@ -27,14 +27,14 @@ export default class Update extends React.Component<props> {
   //   });
   // };
 
-  callUpdate = () => {
+  callUpdate = (e: any) => {
     let id = this.props.id;
     // this.setState({ updateOpen: !this.state.updateOpen }, () => {
-    this.props.updateItem(id);
+    this.props.updateItem(id, e);
     // });
   };
 
   render() {
-    return <div onClick={this.callUpdate}>update</div>;
+    return <div onClick={(e: any) => this.callUpdate(e)}>update</div>;
   }
 }
