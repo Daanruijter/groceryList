@@ -334,50 +334,69 @@ export default class GroceryStore extends React.Component<props> {
   };
 
   catchUpdatedInput = (e: any) => {
-    if (this.state.productUpdated === "" || this.state.amountUpdated === "") {
-      alert("please fill in product and amount fields!");
-    } else {
-      let id = this.state.updateId;
-      let groceryData = this.state;
-      let productUpdated = groceryData.productUpdated;
-      let amountUpdated = groceryData.amountUpdated;
-      let informationUpdated = groceryData.informationUpdated;
-      e.preventDefault();
+    // if (this.state.productUpdated === "" || this.state.amountUpdated === "") {
+    //   alert("please fill in product and amount fields!");
+    // } else {
 
-      let url: string = "";
+    console.log(this.state.groceryData);
 
-      if (process.env.NODE_ENV === "development") {
-        url = "http://localhost:5000/groceryitems/groceryitemsupdated";
+    let groceryDataArray: String[] = [];
+    groceryDataArray = this.state.groceryData;
+
+    let id = this.state.updateId;
+
+    let test = groceryDataArray.filter((item: any) => {
+      if (item._id === id) {
+        return item;
       }
-      if (process.env.NODE_ENV === "production") {
-        url =
-          "https://myitinerariestravelapp.herokuapp.com/groceryitems/groceryitemsupdated";
-      }
+    });
+    //trying to get the data with the current id//
+    console.log(test[0]);
+    // console.log(groceryDataArray);
+    // if (!groceryDataArray.includes(id)) {
+    //   console.log(id);
+    // }
 
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+    let groceryData = this.state;
+    let productUpdated = groceryData.productUpdated;
+    let amountUpdated = groceryData.amountUpdated;
+    let informationUpdated = groceryData.informationUpdated;
+    e.preventDefault();
 
-      const body = JSON.stringify({
-        id,
-        productUpdated,
-        amountUpdated,
-        informationUpdated,
-      });
+    let url: string = "";
 
-      axios
-        .post(url, body, config)
-        .then((res) => {
-          this.fetchData();
-          this.clearStateUpdated();
-        })
-
-        .catch((err) => {
-          console.log(err.response);
-        });
+    if (process.env.NODE_ENV === "development") {
+      url = "http://localhost:5000/groceryitems/groceryitemsupdated";
     }
+    if (process.env.NODE_ENV === "production") {
+      url =
+        "https://myitinerariestravelapp.herokuapp.com/groceryitems/groceryitemsupdated";
+    }
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const body = JSON.stringify({
+      id,
+      productUpdated,
+      amountUpdated,
+      informationUpdated,
+    });
+
+    axios
+      .post(url, body, config)
+      .then((res) => {
+        this.fetchData();
+        this.clearStateUpdated();
+      })
+
+      .catch((err) => {
+        console.log(err.response);
+      });
+    // }
     if (null !== this.inputProductRef.current) {
       this.inputProductRef.current.focus();
     }
