@@ -29,6 +29,7 @@ export default class GroceryStore extends React.Component<props> {
     updateOpen: false,
     updateId: "",
     updateArray: Array<{ id: string; path: string }>(),
+    test: "",
   };
 
   //clear updatearray when the grocerycomponent mounts
@@ -106,6 +107,9 @@ export default class GroceryStore extends React.Component<props> {
         let result = res;
 
         this.setState({ updateArray: result.data[0].updateIdsArray }, () => {});
+        this.setState((prevState) => ({
+          test: prevState,
+        }));
       })
 
       .catch((err) => {
@@ -338,20 +342,28 @@ export default class GroceryStore extends React.Component<props> {
     //   alert("please fill in product and amount fields!");
     // } else {
 
-    console.log(this.state.groceryData);
+    interface makeIdAccessible {
+      _id: String;
+      product: String;
+      amount: String | Number;
+      information: String | Number;
+    }
 
-    let groceryDataArray: String[] = [];
+    let groceryDataArray: makeIdAccessible[];
     groceryDataArray = this.state.groceryData;
-
+    console.log(groceryDataArray[0]._id);
     let id = this.state.updateId;
 
-    let test = groceryDataArray.filter((item: any) => {
+    let currentItemData: makeIdAccessible[];
+
+    currentItemData = groceryDataArray.filter((item: any) => {
       if (item._id === id) {
         return item;
       }
     });
+
     //trying to get the data with the current id//
-    console.log(test[0]);
+    // console.log(apie[0]._id);
     // console.log(groceryDataArray);
     // if (!groceryDataArray.includes(id)) {
     //   console.log(id);
@@ -361,6 +373,12 @@ export default class GroceryStore extends React.Component<props> {
     let productUpdated = groceryData.productUpdated;
     let amountUpdated = groceryData.amountUpdated;
     let informationUpdated = groceryData.informationUpdated;
+
+    let currentProduct = currentItemData[0].product;
+    let currentAmount = currentItemData[0].amount;
+    let currentInformation = currentItemData[0].information;
+    console.log(currentInformation);
+
     e.preventDefault();
 
     let url: string = "";
@@ -384,6 +402,9 @@ export default class GroceryStore extends React.Component<props> {
       productUpdated,
       amountUpdated,
       informationUpdated,
+      currentProduct,
+      currentAmount,
+      currentInformation,
     });
 
     axios
@@ -420,8 +441,19 @@ export default class GroceryStore extends React.Component<props> {
     let itemToDisplay = groceryData.map((item: any) => {
       return (
         <div className="grocerystore-positioner" key={item._id}>
+          {this.state.updateArray[this.state.updateArray.length - 1] ===
+          item._id ? (
+            <div className="grocerystore-horizontal-line-updateopen">
+              <hr />
+            </div>
+          ) : (
+            <div className="grocerystore-horizontal-line-updateclosed">
+              <hr />
+            </div>
+          )}
           <div className="grocerystore-product-data">{item.product}</div>{" "}
-          {this.state.updateArray.includes(item._id) ? (
+          {this.state.updateArray[this.state.updateArray.length - 1] ===
+          item._id ? (
             <div className="grocerystore-product-update">
               <input
                 name="productUpdated"
@@ -435,7 +467,8 @@ export default class GroceryStore extends React.Component<props> {
             </div>
           ) : null}
           <div className="grocerystore-amount-data">{item.amount}</div>
-          {this.state.updateArray.includes(item._id) ? (
+          {this.state.updateArray[this.state.updateArray.length - 1] ===
+          item._id ? (
             <div className="grocerystore-amount-update">
               <input
                 name="amountUpdated"
@@ -450,13 +483,14 @@ export default class GroceryStore extends React.Component<props> {
           <div className="grocerystore-information-data">
             {item.information}
           </div>{" "}
-          {this.state.updateArray.includes(item._id) ? (
+          {this.state.updateArray[this.state.updateArray.length - 1] ===
+          item._id ? (
             <div className="grocerystore-information-update">
               <input
                 name="informationUpdated"
                 onChange={(e: any) => this.addUpdatedInput(e)}
                 type="text"
-                placeholder="type the amount here"
+                placeholder="type the information here"
                 required
                 value={this.state.informationUpdated}
               ></input>
@@ -521,6 +555,7 @@ export default class GroceryStore extends React.Component<props> {
             />
           </div>
           <div className="grocerystore-positioner ">{itemToDisplay}</div>
+
           <div onClick={this.deleteAll} className="grocerystore-delete-all">
             Delete all
           </div>
