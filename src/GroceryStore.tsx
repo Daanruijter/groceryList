@@ -29,7 +29,8 @@ export default class GroceryStore extends React.Component<props> {
     updateOpen: false,
     updateId: "",
     updateArray: Array<{ id: string; path: string }>(),
-    test: "",
+    previousState: { updateArray: Array<{ id: string; path: string }>() },
+    updateIdForUpdateFieldToShow: "",
   };
 
   //clear updatearray when the grocerycomponent mounts
@@ -107,9 +108,6 @@ export default class GroceryStore extends React.Component<props> {
         let result = res;
 
         this.setState({ updateArray: result.data[0].updateIdsArray }, () => {});
-        this.setState((prevState) => ({
-          test: prevState,
-        }));
       })
 
       .catch((err) => {
@@ -139,6 +137,9 @@ export default class GroceryStore extends React.Component<props> {
         this.setState(
           { updateArray: result.data[0].updateIdsArray },
           () => {
+            this.setState((prevState) => ({
+              previousState: prevState,
+            }));
             cback();
           }
 
@@ -435,14 +436,89 @@ export default class GroceryStore extends React.Component<props> {
     });
   };
 
+  // compareUpdateIdArrays() {
+  //   let currentUpdateIdsArray = this.state.updateArray;
+  //   let previousUpdateIdsArray = this.state.previousState.updateArray;
+  //   let length;
+  //   let currentUpdateIdsArrayLength = currentUpdateIdsArray.length;
+  //   let previousUpdateIdsArrayLength = previousUpdateIdsArray.length;
+  //   if (
+  //     currentUpdateIdsArrayLength !== undefined &&
+  //     previousUpdateIdsArrayLength !== undefined
+  //   ) {
+  //     if (currentUpdateIdsArrayLength > previousUpdateIdsArrayLength) {
+  //       let updateIdForUpdateFieldToShow =
+  //         currentUpdateIdsArray[currentUpdateIdsArrayLength - 1];
+
+  //       return updateIdForUpdateFieldToShow;
+
+  // length = currentUpdateIdsArrayLength;
+
+  // console.log(currentUpdateIdsArray[length - 1]);
+
+  // let i = 0;
+  // for (i = 0; i < currentUpdateIdsArrayLength; i++) {
+  //   console.log(currentUpdateIdsArray[i]);
+  //   console.log(previousUpdateIdsArray[i]);
+
+  //   if (currentUpdateIdsArray[i] !== previousUpdateIdsArray[i - 1]) {
+  //     console.log(currentUpdateIdsArray[length - 1]);
+  //     console.log(currentUpdateIdsArray);
+  //     console.log(previousUpdateIdsArray);
+  //   }
+  // }
+  //     }
+  //     if (previousUpdateIdsArrayLength > currentUpdateIdsArrayLength) {
+  //       length = previousUpdateIdsArrayLength;
+  //     }
+
+  //     if (length !== undefined) {
+  //     }
+  //   }
+  // }
+
   render() {
+    let updateIdForUpdateFieldToShow;
+    let currentUpdateIdsArray = this.state.updateArray;
+    let previousUpdateIdsArray = this.state.previousState.updateArray;
+    let length;
+    let currentUpdateIdsArrayLength = currentUpdateIdsArray.length;
+    let previousUpdateIdsArrayLength = previousUpdateIdsArray.length;
+    if (
+      currentUpdateIdsArrayLength !== undefined &&
+      previousUpdateIdsArrayLength !== undefined
+    ) {
+      if (currentUpdateIdsArrayLength > previousUpdateIdsArrayLength) {
+        updateIdForUpdateFieldToShow =
+          currentUpdateIdsArray[currentUpdateIdsArrayLength - 1];
+      }
+    }
+
+    //sss//
+    let whichUpdateFieldToOpen: any;
+    console.log(this.state.updateId);
+    let id: any;
+    id = this.state.updateId;
+
+    if (
+      this.state.updateArray.length !== undefined &&
+      this.state.previousState.updateArray.length !== undefined &&
+      this.state.updateArray.includes(id)
+    ) {
+      whichUpdateFieldToOpen = updateIdForUpdateFieldToShow;
+      // this.compareUpdateIdArrays();
+    }
+    // setTimeout(() => {
+    //   console.log(whichUpdateFieldToOpen);
+    // }, 10000);
+
     let groceryData: any = this.state.groceryData;
 
     let itemToDisplay = groceryData.map((item: any) => {
       return (
         <div className="grocerystore-positioner" key={item._id}>
-          {this.state.updateArray[this.state.updateArray.length - 1] ===
-          item._id ? (
+          {/* {this.state.updateArray[this.state.updateArray.length - 1] === */}
+          {whichUpdateFieldToOpen === item._id ? (
             <div className="grocerystore-horizontal-line-updateopen">
               <hr />
             </div>
@@ -452,8 +528,8 @@ export default class GroceryStore extends React.Component<props> {
             </div>
           )}
           <div className="grocerystore-product-data">{item.product}</div>{" "}
-          {this.state.updateArray[this.state.updateArray.length - 1] ===
-          item._id ? (
+          {/* {this.state.updateArray[this.state.updateArray.length - 1] === */}
+          {whichUpdateFieldToOpen === item._id ? (
             <div className="grocerystore-product-update">
               <input
                 name="productUpdated"
@@ -467,8 +543,7 @@ export default class GroceryStore extends React.Component<props> {
             </div>
           ) : null}
           <div className="grocerystore-amount-data">{item.amount}</div>
-          {this.state.updateArray[this.state.updateArray.length - 1] ===
-          item._id ? (
+          {whichUpdateFieldToOpen === item._id ? (
             <div className="grocerystore-amount-update">
               <input
                 name="amountUpdated"
@@ -483,8 +558,9 @@ export default class GroceryStore extends React.Component<props> {
           <div className="grocerystore-information-data">
             {item.information}
           </div>{" "}
-          {this.state.updateArray[this.state.updateArray.length - 1] ===
-          item._id ? (
+          {/* {this.state.updateArray[this.state.updateArray.length - 1] === */}
+          {whichUpdateFieldToOpen === item._id ? (
+            // item._id ? (
             <div className="grocerystore-information-update">
               <input
                 name="informationUpdated"

@@ -17,6 +17,10 @@ export default class Update extends React.Component<props> {
   };
 
   render() {
-    return <div onClick={(e: any) => this.callUpdate(e)}>update</div>;
+    return (
+      <div className="update-button" onClick={(e: any) => this.callUpdate(e)}>
+        update
+      </div>
+    );
   }
 }
