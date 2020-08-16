@@ -3,7 +3,7 @@
     .grocerystore-grid {
         display: grid;
         align-items: start;
-        grid-template-columns: 6% 10% 10% 10% 7% 6% 6% 8% 37%;
+        grid-template-columns: 21% 10% 10% 10% 7% 6% 6% 8% 22%;
         grid-template-rows: 5% 10% auto 20%;
 
         padding-top: 5%;
@@ -86,7 +86,7 @@
         display: grid;
         grid-column-start: 1;
         grid-column-end: 10;
-        grid-template-columns: 6% 10% 10% 10% 7% 6% 6% 8% 37%;
+        grid-template-columns: 21% 10% 10% 10% 7% 6% 6% 8% 22%;
 
     }
 
