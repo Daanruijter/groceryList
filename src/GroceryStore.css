@@ -21,6 +21,11 @@
         grid-row-start: 2;
         grid-row-end: 3;
 
+
+    }
+
+    .grocerystore-add-item:hover {
+        font-weight: bold;
     }
 
     .grocerystore-product {
@@ -170,6 +175,10 @@
         grid-row-start: 4;
         grid-row-end: 5;
 
+    }
+
+    .grocerystore-delete-all:hover {
+        font-weight: bold;
     }
 
     .grocerystore-horizontal-line-updateclosed {

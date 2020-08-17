@@ -1,0 +1,30 @@
+.login-wrapper {
+    z-index: 11;
+
+    color: red;
+    margin-top: 40px;
+    padding: 5% 5% 5% 5%;
+    background-color: darkorange;
+    position: absolute;
+}
+
+form {
+    color: black;
+    font-weight: bold;
+    background-color: darkorange;
+}
+
+form label {
+    padding-top: 5%;
+}
+
+.login-username label,
+.login-password label {
+    color: black;
+    display: flex;
+    justify-content: space-between;
+}
+
+.login-submit {
+    margin-top: 5%;
+}

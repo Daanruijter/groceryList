@@ -14,6 +14,11 @@
     padding: 1%;
 }
 
+.menu-login:hover,
+.menu-register:hover {
+    color: violet
+}
+
 .menu-register {
     font-weight: bold;
     color: white;

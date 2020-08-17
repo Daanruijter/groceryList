@@ -18,21 +18,39 @@ export default class Menu extends React.Component<
     registerDivOpen: false,
   };
   toggleLoginDiv = () => {
-    this.setState({ loginDivOpen: !this.state.loginDivOpen });
+    this.setState({ loginDivOpen: !this.state.loginDivOpen }, () => {
+      if (this.state.loginDivOpen) {
+        this.setState({ registerDivOpen: !this.state.loginDivOpen });
+      }
+    });
   };
   toggleRegisterDiv = () => {
-    this.setState({ registerDivOpen: !this.state.registerDivOpen });
+    this.setState({ registerDivOpen: !this.state.registerDivOpen }, () => {
+      if (this.state.loginDivOpen) {
+        this.setState({ loginDivOpen: !this.state.loginDivOpen });
+      }
+    });
   };
+
   render() {
     return (
       <div className="menu-wrapper">
         <div onClick={this.toggleLoginDiv} className="menu-login">
-          Login {this.state.loginDivOpen ? <div>logindivopen</div> : null}
+          Login{" "}
         </div>
         <div onClick={this.toggleRegisterDiv} className="menu-register">
           Register
-          {this.state.registerDivOpen ? <div>registerdivopen</div> : null}
         </div>
+        {this.state.loginDivOpen ? (
+          <div>
+            <Login />
+          </div>
+        ) : null}
+        {this.state.registerDivOpen ? (
+          <div>
+            <Register />
+          </div>
+        ) : null}
       </div>
     );
   }
