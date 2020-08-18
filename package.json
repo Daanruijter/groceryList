@@ -6,6 +6,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",
+    "connect": "^3.7.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.9.24",
@@ -13,9 +14,14 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
     "typescript": "^3.7.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/react-redux": "^7.1.9"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

@@ -19,7 +19,7 @@ export default class Register extends Component {
       passWord: this.state.passWord,
     };
     console.log(registrationData);
-    this.setState({ firstName: "", lastName: "", passWord: "" });
+    // this.setState({ firstName: "", lastName: "", passWord: "" });
   };
   render() {
     return (
@@ -45,6 +45,7 @@ export default class Register extends Component {
                 type="text"
                 name="lastName"
                 placeholder="enter your last name"
+                required
               />
             </label>
           </div>
@@ -56,6 +57,7 @@ export default class Register extends Component {
                 type="text"
                 name="passWord"
                 placeholder="enter a password"
+                required
               />
             </label>
             <div className="register-submit">

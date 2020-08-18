@@ -13,12 +13,12 @@ export default class Login extends Component {
 
   handleSubmit = (e: any) => {
     e.preventDefault();
+
     let registrationData = {
       userName: this.state.userName,
       passWord: this.state.passWord,
     };
     console.log(registrationData);
-    this.setState({ userName: "", passWord: "" });
   };
   render() {
     return (
@@ -32,6 +32,7 @@ export default class Login extends Component {
                 type="text"
                 name="userName"
                 placeholder="enter your full name"
+                required
               />
             </label>
           </div>
@@ -43,6 +44,7 @@ export default class Login extends Component {
                 type="text"
                 name="passWord"
                 placeholder="enter a password"
+                required
               />
             </label>
           </div>
