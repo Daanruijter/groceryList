@@ -2,6 +2,8 @@ import { TEST_ACTION } from "./userAndAuthTypes";
 import { TEST_ACTION2 } from "./userAndAuthTypes";
 import { actionInterfaces } from "./actionInterfaces";
 import { AppActions } from "./userAndAuthActionTSTypes";
+import { Dispatch } from "redux";
+import { AppState } from "../reducers/rootReducer";
 
 // export interface Testtest {
 //   type: typeof TEST_ACTION;
@@ -12,14 +14,20 @@ import { AppActions } from "./userAndAuthActionTSTypes";
 export const test = (data: actionInterfaces): AppActions => {
   return {
     type: TEST_ACTION,
-    data: data,
+    data,
   };
 };
 
 export const test2 = (data: actionInterfaces): AppActions => {
   return {
     type: TEST_ACTION2,
-    data: data,
+    data,
+  };
+};
+
+export const sendTest1 = (data: { test1?: string }) => {
+  return (dispatch: Dispatch<AppActions>, getstate: () => AppState) => {
+    const { test1 = "" } = data;
   };
 };
 

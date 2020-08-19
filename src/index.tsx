@@ -10,15 +10,20 @@ import { Provider } from "react-redux";
 
 import "./Menu.css";
 
-import thunk from "redux-thunk";
+import thunk, { ThunkMiddleware } from "redux-thunk";
+import { AppActions } from "./store/actions/userAndAuthActionTSTypes";
 {
   interface IntrinsicAttributes {
     store: any;
   }
 }
+
+export type AppState = ReturnType<typeof rootReducer>;
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk))
+  composeWithDevTools(
+    applyMiddleware(thunk as ThunkMiddleware<AppState, AppActions>)
+  )
 );
 
 const provider = (

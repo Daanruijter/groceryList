@@ -10,19 +10,34 @@ interface StateFromProps {}
 
 interface DispatchFromProps {}
 
+interface MenuProps {
+  test1?: string;
+  test2?: string;
+}
+
+interface MenuState {}
+
 interface registrationAndAuthenticationDivs {
   loginDivOpen: boolean;
   registerDivOpen: boolean;
 }
 
-class Menu extends React.Component<{}, registrationAndAuthenticationDivs> {
+export default class Menu extends React.Component<
+  MenuProps,
+  MenuState
+  // {},
+  // registrationAndAuthenticationDivs
+> {
   state = {
     loginDivOpen: false,
     registerDivOpen: false,
   };
 
   toggleLoginDiv = () => {
-    this.props.test();
+    let stuurmaardoor = "stuurmaardoor man, dit is de bom";
+    let test1 = stuurmaardoor;
+
+    // this.props.test(test1);
     this.setState({ loginDivOpen: !this.state.loginDivOpen }, () => {
       if (this.state.loginDivOpen) {
         this.setState({ registerDivOpen: !this.state.loginDivOpen });
@@ -59,18 +74,22 @@ class Menu extends React.Component<{}, registrationAndAuthenticationDivs> {
       </div>
     );
   }
-
-  mapStateToProps = (state: any) => {
-    return {
-      state: state,
-    };
-  };
-  //fires actions to Redux (in this case the fetchfunction)//
-  mapDispatchToProps = (dispatch: any) => {
-    return { test: () => dispatch(test()) };
-  };
 }
-export default connect<StateFromProps, DispatchFromProps, void>(
-  mapStateToProps,
-  mapDispatchToProps
-)(Menu);
+
+interface LinkStateToProps {}
+interface LinkDispatchProps {}
+
+//   mapStateToProps = (state: any) => {
+//     return {
+//       state: state,
+//     };
+//   };
+//   //fires actions to Redux (in this case the fetchfunction)//
+//   mapDispatchToProps = (dispatch: any) => {
+//     return { test: () => dispatch(test()) };
+//   };
+// }
+// export default connect<StateFromProps, DispatchFromProps, void>(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(Menu);

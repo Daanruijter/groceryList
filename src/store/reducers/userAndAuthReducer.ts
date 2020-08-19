@@ -4,7 +4,7 @@ import { GroceryActionTypes } from "../actions/userAndAuthActionTSTypes";
 
 import { actionInterfaces } from "../actions/actionInterfaces";
 
-const initialState = {
+const initialState: actionInterfaces = {
   test1: "",
   test2: "",
 };
