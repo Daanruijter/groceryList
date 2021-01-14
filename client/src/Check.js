@@ -2,11 +2,9 @@ import React from "react";
 import "./Check.css";
 import axios from "axios";
 
-interface props {
-  id: string;
-}
 
-export default class Check extends React.Component<props> {
+
+export default class Check extends React.Component {
   state = { checkIdArray: "" };
 
   componentDidMount() {
@@ -26,14 +24,14 @@ export default class Check extends React.Component<props> {
 
   //remove an ID if it already exists in the array and the user hits the check button
   removeCheckId = () => {
-    let url: string = "";
+    let url = "";
 
     if (process.env.NODE_ENV === "development") {
       url = "http://localhost:5000/groceryitems/getidforcheck/removeid";
     }
     if (process.env.NODE_ENV === "production") {
       url =
-        "https://myitinerariestravelapp.herokuapp.com/groceryitems/getidforcheck/removeid";
+        "https://blablablaapp.herokuapp.com/groceryitems/getidforcheck/removeid";
     }
 
     let id = this.props.id;
@@ -50,24 +48,24 @@ export default class Check extends React.Component<props> {
 
     axios
       .post(url, body, config)
-      .then((res: any) => {
+      .then((res) => {
         this.fetchCheckIdArray();
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err.response.data);
       });
   };
 
   //fetch the array of checked grocery item ids
   fetchCheckIdArray() {
-    let url: string = "";
+    let url = "";
 
     if (process.env.NODE_ENV === "development") {
       url = "http://localhost:5000/groceryitems/getidforcheck";
     }
     if (process.env.NODE_ENV === "production") {
       url =
-        "https://myitinerariestravelapp.herokuapp.com/groceryitems/getidforcheck";
+        "https://blablablaapp.herokuapp.com/groceryitems/getidforcheck";
     }
 
     fetch(url, {
@@ -85,7 +83,7 @@ export default class Check extends React.Component<props> {
         this.setState({ checkIdArray: ids[0].checkIdArray });
       })
       .catch((error) => {
-        const errorMessage: String = error.message;
+        const errorMessage = error.message;
         console.log(errorMessage);
       });
   }
@@ -99,14 +97,14 @@ export default class Check extends React.Component<props> {
       console.log("includes id");
     }
 
-    let url: string = "";
+    let url = "";
 
     if (process.env.NODE_ENV === "development") {
       url = "http://localhost:5000/groceryitems/pushidforcheck";
     }
     if (process.env.NODE_ENV === "production") {
       url =
-        "https://myitinerariestravelapp.herokuapp.com/groceryitems/pushidforcheck";
+        "https://blablablaapp.herokuapp.com/groceryitems/pushidforcheck";
     }
     let headers = {};
     const body = {

@@ -2,23 +2,19 @@ import React from "react";
 import "./Delete.css";
 import axios from "axios";
 
-interface props {
-  id: string;
-  triggerFetchdata: () => void;
-}
 
-export default class Delete extends React.Component<props> {
+export default class Delete extends React.Component {
   removeCheckId = () => {
     console.log("deleteid");
 
-    let url: string = "";
+    let url = "";
 
     if (process.env.NODE_ENV === "development") {
       url = "http://localhost:5000/groceryitems/getidforcheck/removeid";
     }
     if (process.env.NODE_ENV === "production") {
       url =
-        "https://myitinerariestravelapp.herokuapp.com/groceryitems/getidforcheck/removeid";
+        "https://blablablaapp.herokuapp.com/groceryitems/getidforcheck/removeid";
     }
 
     let id = this.props.id;
@@ -35,11 +31,11 @@ export default class Delete extends React.Component<props> {
 
     axios
       .post(url, body, config)
-      .then((res: any) => {
+      .then((res) => {
         console.log(res);
         // this.fetchCheckIdArray();
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err.response.data);
       });
   };
@@ -49,14 +45,14 @@ export default class Delete extends React.Component<props> {
     if (window.confirm("Are you sure you wish to delete this item?")) {
       let id = this.props.id;
 
-      let url: string = "";
+      let url = "";
 
       if (process.env.NODE_ENV === "development") {
         url = "http://localhost:5000/groceryitems/deleteitem";
       }
       if (process.env.NODE_ENV === "production") {
         url =
-          "https://myitinerariestravelapp.herokuapp.com/groceryitems/deleteitem";
+          "https://blablablaapp.herokuapp.com/groceryitems/deleteitem";
       }
 
       const body = {

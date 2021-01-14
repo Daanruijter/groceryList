@@ -20,12 +20,12 @@
     "web-vitals": "^0.2.4"
   },
   "main": "server.js",
+
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cd ./client && npm run build",
-    "install-client": "cd ./client %% npm install",
-    "start": "concurrently \"nodemon server.js\" \"cd ./client && npm start\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix ./client && npm run build --prefix ./client"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

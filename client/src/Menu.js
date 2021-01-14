@@ -1,42 +1,19 @@
 import React, { Component } from "react";
-import Register from "./Register";
-import Login from "./Login";
-import Logout from "./Logout";
-import { test } from "./store/actions/userAndAuthActions";
+// import Register from "./Register";
 import "./Menu.css";
-import { connect } from "react-redux";
+import Login from "./Login";
+import Register from "./Register";
 
-interface StateFromProps {}
 
-interface DispatchFromProps {}
-
-interface MenuProps {
-  test1?: string;
-  test2?: string;
-}
-
-interface MenuState {}
-
-interface registrationAndAuthenticationDivs {
-  loginDivOpen: boolean;
-  registerDivOpen: boolean;
-}
-
-export default class Menu extends React.Component<
-  MenuProps,
-  MenuState
-  // {},
-  // registrationAndAuthenticationDivs
-> {
+export default class Menu extends React.Component
+  {
   state = {
     loginDivOpen: false,
     registerDivOpen: false,
   };
 
   toggleLoginDiv = () => {
-    let stuurmaardoor = "stuurmaardoor man, dit is de bom";
-    let test1 = stuurmaardoor;
-
+  
     // this.props.test(test1);
     this.setState({ loginDivOpen: !this.state.loginDivOpen }, () => {
       if (this.state.loginDivOpen) {
@@ -76,8 +53,6 @@ export default class Menu extends React.Component<
   }
 }
 
-interface LinkStateToProps {}
-interface LinkDispatchProps {}
 
 //   mapStateToProps = (state: any) => {
 //     return {
